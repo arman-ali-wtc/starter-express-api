@@ -9,3 +9,10 @@ Yo!
 
 [![Deploy to Cyclic](https://deploy.cyclic.app/button.svg)](https://deploy.cyclic.app/)
 
+
+npm install express
+npm install axios
+npm install ejs
+
+node app.js
+
