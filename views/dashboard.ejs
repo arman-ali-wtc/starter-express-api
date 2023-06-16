@@ -2,12 +2,12 @@
 <html>
 <head>
   <title>Product Analytics Dashboard</title>
-  <script src="https://www.chartjs.org/dist/master/chart.js"></script>
+  <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 20px;
     }
 
     h1 {
@@ -44,10 +44,7 @@
   </style>
 </head>
 <body>
-  <h1>Product Analytics Dashboard</h1>
-  <div id="chartContainer">
-    <canvas id="productChart"></canvas>
-  </div>
+  <div id="chartContainer"></div>
   <table>
       <thead>
         <tr>
@@ -78,35 +75,73 @@
     </table>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Retrieve the product amounts and product names from the products data
-      const productAmounts = <%= JSON.stringify(products.map(product => product.productAmount)) %>;
-      const productNames = <%= JSON.stringify(products.map(product => product.productName)) %>;
+    // document.addEventListener('DOMContentLoaded', function() {
+    //   // Retrieve the product amounts and product names from the products data
+    //   const productAmounts = <%= JSON.stringify(products.map(product => product.productAmount)) %>;
+    //   const productNames = <%= JSON.stringify(products.map(product => product.productName)) %>;
 
-      // Create a chart using Chart.js
-      const ctx = document.getElementById('productChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: productNames,
-          datasets: [{
-            label: 'Product Amounts',
-            data: productAmounts,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    });
+    //   // Create a chart using Chart.js
+    //   const ctx = document.getElementById('productChart').getContext('2d');
+    //   new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //       labels: productNames,
+    //       datasets: [{
+    //         label: 'Product Amounts',
+    //         data: productAmounts,
+    //         backgroundColor: 'rgba(75, 192, 192, 0.6)',
+    //         borderColor: 'rgba(75, 192, 192, 1)',
+    //         borderWidth: 1
+    //       }]
+    //     },
+    //     options: {
+    //       responsive: true,
+    //       scales: {
+    //         y: {
+    //           beginAtZero: true
+    //         }
+    //       }
+    //     }
+    //   });
+    // });
+    window.onload = function () {
+      const productAmounts = <%= JSON.stringify(products.map(product => product.productAmount)) %>;
+      const productNames = <%= JSON.stringify(products.map(product => {product.productName})) %>;
+    
+var chart = new CanvasJS.Chart("chartContainer", {
+	theme: "light2",
+	animationEnabled: true,
+	title: {
+		text: "Product Analytics Dashboard",
+    fontSize: 36,
+    color: '#000',
+    fontFamily:'cursive',
+	},
+	data: [{
+		type: "pie",
+		indexLabelFontSize: 18,
+		radius: 80,
+		indexLabel: "{label} - {y}",
+		yValueFormatString: "###0.0\"%\"",
+		click: explodePie,
+		dataPoints: [
+			{ y: 120, label: "Brown T - Shirt" },
+			{ y: 500, label: "Grey Jacket - Larger"},
+			{ y: 200, label: "Blue Bag" },
+		]
+	}]
+});
+chart.render();
+
+function explodePie(e) {
+	for(var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+		if(i !== e.dataPointIndex)
+			e.dataSeries.dataPoints[i].exploded = false;
+	}
+}
+ 
+}
+
   </script>
 </body>
 </html>
