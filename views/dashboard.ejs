@@ -8,6 +8,8 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 20px;
+      background-color: white;
+      background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
     }
 
     h1 {
@@ -105,9 +107,8 @@
     //   });
     // });
     window.onload = function () {
-      const productAmounts = <%= JSON.stringify(products.map(product => product.productAmount)) %>;
-      const productNames = <%= JSON.stringify(products.map(product => {product.productName})) %>;
-    
+      const productData = <%= JSON.stringify(products.map(product => [product.productAmount, product.carbonFootprint])) %>;
+
 var chart = new CanvasJS.Chart("chartContainer", {
 	theme: "light2",
 	animationEnabled: true,
@@ -117,18 +118,26 @@ var chart = new CanvasJS.Chart("chartContainer", {
     color: '#000',
     fontFamily:'cursive',
 	},
+  subtitles:[
+		{
+			text: "Product Names and their carbon Footprint Chart",
+			fontColor: "darkMagenta",
+			fontSize: 16
+		}
+		],
 	data: [{
 		type: "pie",
 		indexLabelFontSize: 18,
 		radius: 80,
 		indexLabel: "{label} - {y}",
-		yValueFormatString: "###0.0\"%\"",
+		yValueFormatString: "###0.0\"\"",
 		click: explodePie,
 		dataPoints: [
-			{ y: 120, label: "Brown T - Shirt" },
-			{ y: 500, label: "Grey Jacket - Larger"},
-			{ y: 200, label: "Blue Bag" },
+			{ y: 0.94, label: "Brown T - Shirt" },
+			{ y: 2.32, label: "Grey Jacket - Larger"},
+			{ y: 2.32, label: "Blue Bag" },
 		]
+   
 	}]
 });
 chart.render();
